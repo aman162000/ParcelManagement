@@ -1,0 +1,49 @@
+# === Java class files ===
+*.class
+
+# === Package Files ===
+*.jar
+*.war
+*.ear
+
+# === Eclipse project files ===
+.settings/
+.project
+.classpath
+
+# === Build output ===
+/build/
+/bin/
+target/
+
+# === Server configuration ===
+Servers/
+
+# === Tomcat working directories ===
+work/
+temp/
+logs/
+
+# === Logs and temp files ===
+*.log
+*.tmp
+*.bak
+*.swp
+*~
+
+# === OS-specific ===
+.DS_Store
+Thumbs.db
+
+# === Maven (if used) ===
+.mvn/
+!**/src/main/**
+!**/src/test/**
+
+# === IntelliJ IDEA (optional) ===
+.idea/
+*.iml
+out/
+
+# === VS Code (optional) ===
+.vscode/
