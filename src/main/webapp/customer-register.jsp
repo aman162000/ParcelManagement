@@ -1,7 +1,14 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="javax.servlet.http.HttpSession, com.parcel.models.User" %>
+
+<%
+	User user = (User) request.getAttribute("user");
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-16">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Registration - PMS</title>
     <link rel="stylesheet" href="css/style.css">
@@ -12,6 +19,11 @@
             <div class="logo">
                 <h1>📦 PMS</h1>
                 <p>Customer Registration</p>
+                <% String error = (String) request.getAttribute("error"); %>
+                <% if(error!=null) {%>
+                        <span class="error-message" id="nameError"><%= error %></span>
+                
+                <%}%>
             </div>
             
             <form id="registerForm" class="form" method="post" action="RegisterServlet">
@@ -103,20 +115,33 @@
                 </div>
                 
                 <div class="login-link">
-                    <p>Already have an account? <a href="index.html">Login here</a></p>
+                    <p>Already have an account? <a href="index.jsp">Login here</a></p>
                 </div>
             </form>
         </div>
     </div>
     
     <!-- Success Modal -->
-    <div id="successModal" class="modal hidden">
+    <% Boolean isRegisteredSuccessfully = (Boolean) request.getAttribute("isRegistered"); %>
+    <% if(isRegisteredSuccessfully != null) {%>
+   
+    
+    <div id="successModal" class="modal">
         <div class="modal-content">
-            <h2 class="success-title">Registration Successful! ✅</h2>
-            <div id="successDetails" class="success-details"></div>
-            <button onclick="goToLogin()" class="btn btn-primary">Go to Login</button>
+            <h2 class="success-title">Registration Successful! ✅</h2>
+            <div id="successDetails" class="success-details">
+            <div class="success-info">
+            <p><strong>Generated Username:</strong> <%= user.getUserIdString()%></p>
+            <p><strong>Customer Name:</strong> <%= user.getCustomerName()%></p>
+            <p><strong>Email:</strong> <%= user.getEmail() %></p>
+            <p><strong>Customer ID:</strong> <%= user.getCustomerId()%></p>
+            <p class="success-message">Account created successfully! You can now log in with your credentials.</p>
+        </div>
+            </div>
+            <button onclick="window.location.href='index.jsp'" class="btn btn-primary">Go to Login</button>
         </div>
     </div>
+    <%}%>
     
     <script src="utils.js"></script>
     <script src="auth.js"></script>

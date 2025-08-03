@@ -1,7 +1,9 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-16">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parcel Management System - Login</title>
     <link rel="stylesheet" href="css/style.css">
@@ -12,14 +14,19 @@
             <div class="logo">
                 <h1>📦 PMS</h1>
                 <p>Parcel Management System</p>
+                <% String error = (String) request.getAttribute("error"); %>
+                <% if(error!=null) {%>
+                        <span class="error-message" id="nameError"><%= error %></span>
+                <%}%>
             </div>
             
-            <form id="loginForm" class="form">
+            <form id="loginForm" class="form" method="post" action="LoginServlet">
                 <h2>Login</h2>
                 
                 <div class="form-group">
                     <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required minlength="5" maxlength="20" placeholder="Enter username (5-20 characters)">
+                    <input type="text" id="username" name="username" required 
+                           minlength="5" maxlength="20" placeholder="Enter username (5-20 characters)">
                     <span class="error-message" id="usernameError"></span>
                 </div>
                 
@@ -42,7 +49,7 @@
                 <button type="submit" class="btn btn-primary">Login</button>
                 
                 <div class="register-link">
-                    <p>New customer? <a href="customer-register.html">Register here</a></p>
+                    <p>New customer? <a href="customer-register.jsp">Register here</a></p>
                 </div>
             </form>
         </div>
@@ -52,3 +59,4 @@
     <script src="auth.js"></script>
 </body>
 </html>
+
