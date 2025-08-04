@@ -20,7 +20,7 @@ public class DatabaseConnection {
 //                Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 				Class.forName("com.mysql.cj.jdbc.Driver");
 				connection = DriverManager.getConnection(MY_SQL_URL, MY_SQL_USER, MY_SQL_PASSWORD);
-				createTables();
+//				createTables();
 			} catch (ClassNotFoundException e) {
 				throw new SQLException("Derby driver not found", e);
 			}
@@ -49,7 +49,7 @@ public class DatabaseConnection {
 			// Create Bookings table
 			String createBookingsTable = """
 					CREATE TABLE bookings (
-					    booking_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+					    booking_id VARCHAR(50) PRIMARY KEY,
 					    customer_id INTEGER NOT NULL,
 					    customer_name VARCHAR(50) NOT NULL,
 					    customer_address VARCHAR(500) NOT NULL,

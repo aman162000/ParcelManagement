@@ -2,7 +2,14 @@
 <%@ page import="javax.servlet.http.HttpSession, com.parcel.models.User" %>
 
 <%
-	User user = (User) request.getAttribute("user");
+User user = (User) session.getAttribute("user");
+if (user != null) {
+	if(user.getRole().equalsIgnoreCase("CUSTOMER")){
+		response.sendRedirect("customer-home.jsp");	
+	}else{
+		response.sendRedirect("officer-home.jsp");
+	}
+}
 %>
 
 <!DOCTYPE html>
