@@ -31,6 +31,7 @@ public class User extends BaseModel {
 		this.password = password;
 		this.role = role;
 		this.preferences = preferences;
+		this.userId = Integer.parseInt(NumericUniqueIDGenerator.generateUniqueId("").substring(0, 5));
 	}
 
 	public int getUserId() {

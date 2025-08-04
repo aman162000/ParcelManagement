@@ -31,8 +31,8 @@ public class UserDAO {
 
         String sql = """
             INSERT INTO users (customer_name, email, country_code, mobile_number, address, 
-                             user_id_string, password, role, preferences,customer_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)
+                             user_id_string, password, role, preferences,customer_id,user_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?)
             """;
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -48,6 +48,7 @@ public class UserDAO {
             pstmt.setString(8, user.getRole());
             pstmt.setString(9, user.getPreferences());
             pstmt.setString(10, user.getCustomerId());
+            pstmt.setInt(11, user.getUserId());
             
             pstmt.executeUpdate();
         }
