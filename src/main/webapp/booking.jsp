@@ -14,66 +14,8 @@ User user = (User) session.getAttribute("user"); // assuming userRole is set as 
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-	<nav class="navbar">
-		<div class="nav-brand">
-			<h1>📦 PMS</h1>
-		</div>
-		<div class="nav-welcome">
-			<span id="welcomeMessage">Welcome, <%= user.getCustomerName() %></span>
-		</div>
-		<ul class="nav-menu" id="navMenu">
-			<%
-			String currentPage = request.getRequestURI().substring(request.getRequestURI().lastIndexOf("/") + 1);
-			String userRole = user.getRole();
-			// Check user role and generate the appropriate navigation menu
-			if ("customer".equalsIgnoreCase(userRole)) {
-			%>
-			<li><a href="customer-home.jsp"
-				<%="customer-home.jsp".equals(currentPage) ? "class='active'" : ""%>>Home</a></li>
-			<li><a href="booking.jsp"
-				<%="booking.jsp".equals(currentPage) ? "class='active'" : ""%>>Booking
-					Service</a></li>
-			<li><a href="tracking.html"
-				<%="tracking.html".equals(currentPage) ? "class='active'" : ""%>>Tracking</a></li>
-			<li><a href="booking-history.jsp"
-				<%="booking-history.jsp".equals(currentPage) ? "class='active'" : ""%>>Previous
-					Booking</a></li>
-			<li><a href="customer-support.jsp"
-				<%="customer-support.jsp".equals(currentPage) ? "class='active'" : ""%>>Contact
-					Support</a></li>
-			<li><a href="logout.jsp">Logout</a></li>
 
-			<%
-			} else if ("officer".equalsIgnoreCase(userRole)) {
-			%>
-			<li><a href="officer-home.jsp"
-				<%="officer-home.jsp".equals(currentPage) ? "class='active'" : ""%>>Home</a></li>
-			<li><a href="tracking.html"
-				<%="tracking.html".equals(currentPage) ? "class='active'" : ""%>>Tracking</a></li>
-			<li><a href="delivery-status.jsp"
-				<%="delivery-status.jsp".equals(currentPage) ? "class='active'" : ""%>>Delivery
-					Status</a></li>
-			<li><a href="pickup-scheduling.jsp"
-				<%="pickup-scheduling.jsp".equals(currentPage) ? "class='active'" : ""%>>Pickup
-					Scheduling</a></li>
-			<li><a href="booking-history.jsp"
-				<%="booking-history.jsp".equals(currentPage) ? "class='active'" : ""%>>Previous
-					Booking</a></li>
-			<li><a href="logout.jsp">Logout</a></li>
-
-			<%
-			} else { // For guest or unauthorized users
-			%>
-			<li><a href="index.jsp"
-				<%="index.jsp".equals(currentPage) ? "class='active'" : ""%>>Home</a></li>
-			<li><a href="login.jsp"
-				<%="login.jsp".equals(currentPage) ? "class='active'" : ""%>>Login</a></li>
-			<%
-			}
-			%>
-		</ul>
-
-	</nav>
+	<%@include file="nav.jsp" %>
 
 	<div class="container">
 		<div class="booking-container">

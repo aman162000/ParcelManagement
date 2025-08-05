@@ -18,24 +18,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-brand">
-            <h1>📦 PMS</h1>
-        </div>
-        <div class="nav-welcome">
-            <span id="welcomeMessage">Welcome, <%= user.getCustomerName()%>
-            
-            </span>
-        </div>
-        <ul class="nav-menu">
-            <li><a href="customer-home.jsp" class="active">Home</a></li>
-            <li><a href="booking.jsp">Booking Service</a></li>
-            <li><a href="tracking.jsp">Tracking</a></li>
-            <li><a href="booking-history.jsp">Previous Booking</a></li>
-            <li><a href="customer-support.jsp">Contact Support</a></li>
-            <li><a href="LogoutServlet">Logout</a></li>
-        </ul>
-    </nav>
+   <%@include file="nav.jsp" %>
     
     <div class="dashboard">
         <div class="dashboard-header">
@@ -48,28 +31,28 @@
                 <div class="card-icon">📋</div>
                 <h3>Book a Service</h3>
                 <p>Schedule a new parcel delivery</p>
-                <a href="booking.html" class="btn btn-primary">Book Now</a>
+                <a href="booking.jsp" class="btn btn-primary">Book Now</a>
             </div>
             
             <div class="dashboard-card">
                 <div class="card-icon">🔍</div>
                 <h3>Track Parcel</h3>
                 <p>Track your parcel's delivery status</p>
-                <a href="tracking.html" class="btn btn-primary">Track Now</a>
+                <a href="tracking.jsp" class="btn btn-primary">Track Now</a>
             </div>
             
             <div class="dashboard-card">
                 <div class="card-icon">📊</div>
                 <h3>Booking History</h3>
                 <p>View your previous bookings</p>
-                <a href="booking-history.html" class="btn btn-primary">View History</a>
+                <a href="booking-history.jsp" class="btn btn-primary">View History</a>
             </div>
             
             <div class="dashboard-card">
                 <div class="card-icon">💬</div>
                 <h3>Customer Support</h3>
                 <p>Get help and support</p>
-                <a href="customer-support.html" class="btn btn-primary">Contact Us</a>
+                <a href="customer-support.jsp" class="btn btn-primary">Contact Us</a>
             </div>
         </div>
         

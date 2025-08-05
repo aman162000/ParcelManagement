@@ -70,6 +70,25 @@ public class BookingDAO {
         }
         return null;
     }
+    
+    public Booking getBookingByCustomer(String bookingId,String customerId) throws SQLException {
+        String sql = "SELECT * FROM bookings WHERE booking_id = ? AND customer_id = ?";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, bookingId);
+            pstmt.setString(2, customerId);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToBooking(rs);
+                }
+            }
+        }
+        return null;
+    }
+    
 
     public List<Booking> getBookingsByCustomer(String customerId) throws SQLException {
         String sql = "SELECT * FROM bookings WHERE customer_id = ? ORDER BY booking_date DESC";
@@ -153,6 +172,28 @@ public class BookingDAO {
         }
     }
 
+    public List<Booking> getAllBookings() throws SQLException, NoDataFoundException {
+        String sql = "SELECT * FROM bookings ORDER BY booking_date DESC";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                List<Booking> bookings = new ArrayList<>();
+                while (rs.next()) {
+                    bookings.add(mapResultSetToBooking(rs));
+                }
+                
+                if (bookings.isEmpty()) {
+                    throw new NoDataFoundException("No Details found in the given criteria");
+                }
+                
+                return bookings;
+            }
+        }
+    }
+
+    
     private Booking mapResultSetToBooking(ResultSet rs) throws SQLException {
         Booking booking = new Booking();
         booking.setBookingId(rs.getString("booking_id"));
