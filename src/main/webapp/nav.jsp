@@ -26,8 +26,8 @@ String currentURL = request.getRequestURI(); // Gets the current request URL
 	<ul class="nav-menu">
 		<li><a href="officer-home.jsp" class="<%= currentURL.contains("officer-home.jsp") ? "active" : "" %>">Home</a></li>
 		<li><a href="tracking.jsp" class="<%= currentURL.contains("tracking.jsp") ? "active" : "" %>">Tracking</a></li>
-		<li><a href="delivery-status.jsp" class="<%= currentURL.contains("delivery-status.jsp") ? "active" : "" %>">Delivery Status</a></li>
-		<li><a href="pickup-scheduling.jsp" class="<%= currentURL.contains("pickup-scheduling.jsp") ? "active" : "" %>">Pickup Scheduling</a></li>
+		<li><a href="UpdateDeliveryStatusServlet?action=view" class="<%= currentURL.contains("UpdateDeliveryStatusServlet?action=view") ? "active" : "" %>">Delivery Status</a></li>
+		<li><a href="SchedulingServlet?action=view" class="<%= currentURL.contains("SchedulingServlet?action=view") ? "active" : "" %>">Pickup Scheduling</a></li>
 		<li><a href="booking-history.jsp" class="<%= currentURL.contains("booking-history.jsp") ? "active" : "" %>">Previous Booking</a></li>
 		<li><a href="LogoutServlet">Logout</a></li>
 	</ul>

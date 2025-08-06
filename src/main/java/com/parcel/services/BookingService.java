@@ -54,6 +54,10 @@ public class BookingService {
     public Booking getBookingById(String bookingId) throws SQLException {
         return bookingDAO.getBookingById(bookingId);
     }
+    
+    public List<Booking> listBooking() throws SQLException, NoDataFoundException{
+    	return bookingDAO.getAllBookings();
+    }
 
     public List<Booking> getCustomerBookingHistory(String customerId) throws SQLException {
         return customerBookingHistory.getCustomerBookings(customerId);
@@ -72,10 +76,10 @@ public class BookingService {
     }
     
     public void updateDeliveryStatus(String bookingId, String status) throws SQLException {
-        String[] validStatuses = {"Booked", "In Transit", "Delivered", "Returned"};
+        String[] validStatuses = {"Booked", "In-Transit", "Delivered", "Returned","Picked-up"};
         boolean isValid = false;
         for (String validStatus : validStatuses) {
-            if (validStatus.equals(status)) {
+            if (validStatus.equalsIgnoreCase(status)) {
                 isValid = true;
                 break;
             }

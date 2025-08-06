@@ -55,13 +55,6 @@
                 <a href="customer-support.jsp" class="btn btn-primary">Contact Us</a>
             </div>
         </div>
-        
-        <div class="recent-activity">
-            <h3>Recent Activity</h3>
-            <div id="recentBookings" class="activity-list">
-                <!-- Recent bookings will be loaded here -->
-            </div>
-        </div>
     </div>
     
     <script src="utils.js"></script>

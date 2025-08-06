@@ -1,10 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="javax.servlet.http.HttpSession, com.parcel.models.User"%>
-
+<%@include file="successModal.jsp"%>
 <%
-User user = (User) session.getAttribute("user"); // assuming userRole is set as a request attribute
+User user = (User) session.getAttribute("user");
+
+if (user == null) {
+	response.sendRedirect("index.jsp");
+	return;
+}
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +21,7 @@ User user = (User) session.getAttribute("user"); // assuming userRole is set as 
 </head>
 <body>
 
-	<%@include file="nav.jsp" %>
+	<%@include file="nav.jsp"%>
 
 	<div class="container">
 		<div class="booking-container">
@@ -28,19 +34,21 @@ User user = (User) session.getAttribute("user"); // assuming userRole is set as 
 					<div class="form-row">
 						<div class="form-group">
 							<label for="senderName">Name:</label> <input type="text"
-								id="senderName" name="senderName" required> <span
-								class="error-message" id="senderNameError"></span>
+								value="<%=user.getCustomerName()%>" id="senderName"
+								name="senderName" required> <span class="error-message"
+								id="senderNameError"></span>
 						</div>
 						<div class="form-group">
 							<label for="senderContact">Contact Number:</label> <input
-								type="tel" id="senderContact" name="senderContact" required>
-							<span class="error-message" id="senderContactError"></span>
+								value="<%=user.getMobileNumber()%>" type="tel"
+								id="senderContact" name="senderContact" required> <span
+								class="error-message" id="senderContactError"></span>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="senderAddress">Address:</label>
 						<textarea id="senderAddress" name="senderAddress" required
-							rows="2"></textarea>
+							rows="2"><%=user.getAddress().trim()%></textarea>
 						<span class="error-message" id="senderAddressError"></span>
 					</div>
 					<div class="form-group">
@@ -128,14 +136,9 @@ User user = (User) session.getAttribute("user"); // assuming userRole is set as 
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="preferredTime">Preferred Time Slot:</label> <select
-							id="preferredTime" name="preferredTime" required>
-							<option value="">Select Time</option>
-							<option value="9-12">9:00 AM - 12:00 PM</option>
-							<option value="12-15">12:00 PM - 3:00 PM</option>
-							<option value="15-18">3:00 PM - 6:00 PM</option>
-							<option value="18-21">6:00 PM - 9:00 PM</option>
-						</select> <span class="error-message" id="preferredTimeError"></span>
+						<label for="preferredTime">Preferred Time:</label> <input
+							type="time" id="preferredTime" name="preferredTime" required>
+						<span class="error-message" id="preferredTimeError"></span>
 					</div>
 				</div>
 

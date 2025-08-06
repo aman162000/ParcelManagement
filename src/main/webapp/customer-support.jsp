@@ -3,7 +3,13 @@
 <%@page
 	import="com.parcel.models.User,com.parcel.models.Booking,java.util.List,java.sql.Timestamp"%>
 <%
-User user = (User) session.getAttribute("user");
+	User user = (User) session.getAttribute("user");
+	
+	if(user == null){
+	response.sendRedirect("index.jsp");
+	return;
+}
+
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -155,15 +161,6 @@ User user = (User) session.getAttribute("user");
     
     <script src="utils.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            if (!requireAuth()) return;
-            
-            const user = getCurrentUser();
-            if (!user) return;
-            
-            updateNavigation(user.role);
-            document.getElementById('welcomeMessage').textContent = `Welcome, ${user.name || user.username}`;
-        });
         
         function toggleFAQ(element) {
             const faqItem = element.parentElement;

@@ -19,24 +19,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-brand">
-            <h1>📦 PMS</h1>
-        </div>
-        <div class="nav-welcome">
-            <span id="welcomeMessage">Welcome, 
-            <%= user.getCustomerName() %>
-            </span>
-        </div>
-        <ul class="nav-menu">
-            <li><a href="officer-home.jsp" class="active">Home</a></li>
-            <li><a href="tracking.jsp">Tracking</a></li>
-            <li><a href="delivery-status.jsp">Delivery Status</a></li>
-            <li><a href="pickup-scheduling.jsp">Pickup Scheduling</a></li>
-            <li><a href="booking-history.jsp">Previous Booking</a></li>
-            <li><a href="LogoutServlet">Logout</a></li>
-        </ul>
-    </nav>
+    <%@include file="nav.jsp" %>
     
     <div class="dashboard">
         <div class="dashboard-header">
@@ -63,7 +46,7 @@
                 <div class="card-icon">🚚</div>
                 <h3>Delivery Status</h3>
                 <p>Update package delivery status</p>
-                <a href="delivery-status.jsp" class="btn btn-primary">Update Status</a>
+                <a href="UpdateDeliveryStatusServlet?action=view" class="btn btn-primary">Update Status</a>
             </div>
             
             <div class="dashboard-card">

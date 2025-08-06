@@ -165,15 +165,19 @@ function handleBookingSubmit(e) {
 		method: 'POST',
 		body: new URLSearchParams([...formData.entries()])
 	})
-		.then(response => response.text())
-		.then(data => {
-			alert(`Booking created successfully!\nBooking ID: ${data}`);
-			window.location.href = "payment.jsp";
-		})
-		.catch(error => {
-			console.error('Error:', error);
-		});
-
+	.then(res => res.json())
+	.then(data => {
+	  if (data.status === "success") {
+	    alert("Booking successful!");
+	    // Redirect or show payment UI
+		window.location.href = "payment.jsp"
+	  } else {
+	    alert("Error: " + data.message);
+	  }
+	})
+	.catch(err => {
+	  console.error("Fetch error:", err);
+	});
 	resetForm();
 }
 function validateBookingData(data) {

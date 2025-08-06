@@ -3,16 +3,39 @@
 <%@ page
 	import="java.util.*, com.parcel.models.Booking, com.parcel.models.User"%>
 <%@ page session="true"%>
+<%@ include file="successModal.jsp"%>
 <%
 User user = (User) session.getAttribute("user");
 
-if (user == null || !"officer".equalsIgnoreCase(user.getRole())) {
+if (user == null || user.getRole() == null || !"officer".equalsIgnoreCase(user.getRole())) {
 	response.sendRedirect("index.jsp");
 	return;
 }
 
 Booking booking = (Booking) request.getAttribute("booking");
+List<Booking> bookings = (List<Booking>) request.getAttribute("bookings");
+
+Map<String, Integer> stats = new HashMap<>();
+stats.put("picked-up", 0);
+stats.put("in-transit", 0);
+stats.put("delivered", 0);
+stats.put("returned", 0);
+
+if (bookings != null) {
+	for (Booking book : bookings) {
+		if (book != null && book.getParStatus() != null) {
+	String status = book.getParStatus().toLowerCase();
+
+	if (stats.containsKey(status)) {
+		stats.put(status, stats.get(status) + 1);
+	} else {
+		stats.put(status, stats.getOrDefault(status, 0) + 1);
+	}
+		}
+	}
+}
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,6 +52,37 @@ Booking booking = (Booking) request.getAttribute("booking");
 		<div class="delivery-container">
 			<h2>🚚 Delivery Status Management</h2>
 
+			<div class="status-overview">
+				<h3>📊 Status Overview</h3>
+				<div class="status-stats">
+					<div class="stat-card">
+						<h4>Picked Up</h4>
+						<div class="stat-number" id="pickedUpCount">
+							<%=stats.getOrDefault("picked-up", 0)%>
+						</div>
+					</div>
+					<div class="stat-card">
+						<h4>In Transit</h4>
+						<div class="stat-number" id="inTransitCount">
+							<%=stats.getOrDefault("in-transit", 0)%>
+
+						</div>
+					</div>
+					<div class="stat-card">
+						<h4>Delivered</h4>
+						<div class="stat-number" id="deliveredCount">
+							<%=stats.getOrDefault("delivered", 0)%>
+						</div>
+					</div>
+					<div class="stat-card">
+						<h4>Returned</h4>
+						<div class="stat-number" id="returnedCount">
+							<%=stats.getOrDefault("returned", 0)%>
+						</div>
+					</div>
+				</div>
+			</div>
+
 			<div class="status-update-form">
 				<h3>Update Package Status</h3>
 				<form id="statusForm" class="form"
@@ -36,7 +90,8 @@ Booking booking = (Booking) request.getAttribute("booking");
 					<div class="form-group">
 						<label for="bookingId">Booking ID:</label> <input type="text"
 							id="bookingId" name="bookingId" required="" maxlength="14"
-							placeholder="Enter 12-digit booking ID">
+							placeholder="Enter 12-digit booking ID"> <input
+							type="hidden" name="action" value="get-booking">
 						<div class="button-group">
 							<button type="submit" class="btn btn-primary">Search</button>
 						</div>
@@ -86,9 +141,10 @@ Booking booking = (Booking) request.getAttribute("booking");
 					%>
 
 				</form>
-				<form>
+				<form method="post" action="UpdateDeliveryStatusServlet">
 					<%
-					String currentStatus = booking != null ? booking.getParStatus() : "booked";
+					String currentStatus = booking != null ? booking.getParStatus().toLowerCase() : "booked";
+					String id = booking != null ? booking.getBookingId() : "";
 					Map<String, List<String>> validTransitions = new HashMap<>();
 					validTransitions.put("booked", Arrays.asList("picked-up"));
 					validTransitions.put("picked-up", Arrays.asList("in-transit", "returned"));
@@ -99,7 +155,6 @@ Booking booking = (Booking) request.getAttribute("booking");
 					List<String> nextStatuses = validTransitions.getOrDefault(currentStatus, Collections.emptyList());
 					%>
 					<div class="form-group">
-					<%out.print(currentStatus); %>
 						<label for="newStatus">Update Status To:</label> <select
 							id="newStatus" name="newStatus" required>
 							<option value="">Select Status</option>
@@ -108,6 +163,7 @@ Booking booking = (Booking) request.getAttribute("booking");
 								for (String status : nextStatuses) {
 									// Format display name: picked-up → Picked Up
 									String displayName = status.replace("-", " ");
+
 									displayName = displayName.substring(0, 1).toUpperCase() + displayName.substring(1);
 							%>
 							<option value="<%=status%>"><%=displayName%></option>
@@ -119,7 +175,8 @@ Booking booking = (Booking) request.getAttribute("booking");
 							<%
 							}
 							%>
-						</select> <span class="error-message" id="newStatusError"></span>
+						</select> <span class="error-message" id="newStatusError"></span> <input
+							type="hidden" name="bookingId" value="<%=id%>">
 					</div>
 					<div class="form-group">
 						<label for="statusNotes">Status Notes:</label>
@@ -139,55 +196,22 @@ Booking booking = (Booking) request.getAttribute("booking");
 				</form>
 			</div>
 
-			<div class="status-overview">
-				<h3>📊 Status Overview</h3>
-				<div class="status-stats">
-					<div class="stat-card">
-						<h4>Picked Up</h4>
-						<div class="stat-number" id="pickedUpCount">0</div>
-					</div>
-					<div class="stat-card">
-						<h4>In Transit</h4>
-						<div class="stat-number" id="inTransitCount">0</div>
-					</div>
-					<div class="stat-card">
-						<h4>Delivered</h4>
-						<div class="stat-number" id="deliveredCount">0</div>
-					</div>
-					<div class="stat-card">
-						<h4>Returned</h4>
-						<div class="stat-number" id="returnedCount">0</div>
-					</div>
-				</div>
-			</div>
 
-			<div class="recent-updates">
-				<h3>🕒 Recent Status Updates</h3>
-				<div id="recentUpdates" class="updates-list">
-					<p class="text-center">No recent status updates.</p>
-				</div>
-			</div>
 		</div>
 	</div>
 
-	<!-- Success Modal -->
-	<div id="successModal" class="modal hidden">
-		<div class="modal-content">
-			<h2 class="success-title">Status Updated Successfully! ✅</h2>
-			<div id="successDetails" class="success-details"></div>
-			<button onclick="closeSuccessModal()" class="btn btn-primary">OK</button>
-		</div>
-	</div>
-
-	<!-- Inject user info for JS -->
+	<%
+	if (request.getAttribute("showSuccessModal") != null) {
+	%>
 	<script>
-        const currentUser = {
-            id: "<%=user.getCustomerId()%>",
-            name: "<%=user.getCustomerName() != null ? user.getCustomerName() : user.getUserIdString()%>",
-            role: "<%=user.getRole()%>
-		"
-		};
+		document.addEventListener("DOMContentLoaded", function() {
+			showSuccessModal();
+		});
 	</script>
+	<%
+	}
+	%>
+
 
 	<script src="utils.js"></script>
 </body>
