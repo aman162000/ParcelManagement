@@ -33,6 +33,11 @@ public class UserService {
 		return userDAO.login(userIdString, password);
 	}
 
+	public User getUserByCustomerId(String customerId) throws SQLException {
+		return userDAO.getUserByCustomerId(customerId);
+
+	}
+	
 	private void validateUserData(User user) throws IllegalArgumentException {
 		if (!ValidationUtils.isValidName(user.getCustomerName())) {
 			throw new IllegalArgumentException("Customer name must be 1-50 characters");

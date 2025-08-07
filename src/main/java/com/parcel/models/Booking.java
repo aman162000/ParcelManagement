@@ -24,6 +24,7 @@ public class Booking {
 	private String parStatus;
 	private Timestamp bookingDate;
 	private boolean isPaid;
+	private String size;
 
 	public Booking() {
 		this.bookingId = NumericUniqueIDGenerator.generateUniqueId("BK");
@@ -41,10 +42,10 @@ public class Booking {
 				+ bookingDate + ", isPaid=" + isPaid + "]";
 	}
 
-	public Booking(String customerId, String customerName, String customerAddress, String customerContact, String recName,
-			String recAddress, String recPin, String recMobile, int parWeightGram, String parContentsDescription,
-			String parDeliveryType, String parPackingPreference, Timestamp parPickupTime, Timestamp parDropoffTime,
-			double parServiceCost, Timestamp parPaymentTime, String parStatus) {
+	public Booking(String customerId, String customerName, String customerAddress, String customerContact,
+			String recName, String recAddress, String recPin, String recMobile, int parWeightGram,
+			String parContentsDescription, String parDeliveryType, String parPackingPreference, Timestamp parPickupTime,
+			Timestamp parDropoffTime, double parServiceCost, Timestamp parPaymentTime, String parStatus, String size) {
 		this.customerId = customerId;
 		this.customerName = customerName;
 		this.customerAddress = customerAddress;
@@ -65,6 +66,7 @@ public class Booking {
 		this.bookingDate = new Timestamp(System.currentTimeMillis());
 		this.bookingId = NumericUniqueIDGenerator.generateUniqueId("BK");
 		this.isPaid = false;
+		this.size = size;
 	}
 
 	// Getters and Setters
@@ -74,6 +76,14 @@ public class Booking {
 
 	public void setBookingId(String bookingId) {
 		this.bookingId = bookingId;
+	}
+
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
 	}
 
 	public String getCustomerId() {

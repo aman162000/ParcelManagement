@@ -16,8 +16,8 @@ public class BookingDAO {
                                 rec_name, rec_address, rec_pin, rec_mobile, par_weight_gram,
                                 par_contents_description, par_delivery_type, par_packing_preference,
                                 par_pickup_time, par_dropoff_time, par_service_cost, par_payment_time,
-                                par_status, booking_date,booking_id,payment_status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                par_status, booking_date,booking_id,payment_status,size)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
             """;
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -43,6 +43,7 @@ public class BookingDAO {
             pstmt.setTimestamp(18, booking.getBookingDate());
             pstmt.setString(19, booking.getBookingId());
             pstmt.setBoolean(20, false);
+            pstmt.setString(21, booking.getSize());
             pstmt.executeUpdate();
             
             try (ResultSet rs = pstmt.getGeneratedKeys()) {

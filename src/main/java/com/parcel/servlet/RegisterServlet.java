@@ -74,8 +74,10 @@ public class RegisterServlet extends HttpServlet {
 				throw new IllegalArgumentException("Invalid email format!");
 			}
 
+			String _mobile = mobile.split(" ")[1];
+			
 			// Validate mobile number format (basic validation for a 10-digit number)
-			if (mobile.length() != 10 || !StringUtils.isNumeric(mobile)) {
+			if (_mobile.length() != 10 || !StringUtils.isNumeric(_mobile)) {
 				throw new IllegalArgumentException("Invalid mobile number format!");
 			}
 
@@ -85,7 +87,7 @@ public class RegisterServlet extends HttpServlet {
 			// Assuming preferences are optional
 			String preferences = checkBoxValues != null && checkBoxValues.length > 0 ? checkBoxValues[0] : null;
 
-			User user = new User(name, email, COUNTRY_CODE, mobile, address, userId, hashedPassword, "CUSTOMER",
+			User user = new User(name, email, COUNTRY_CODE, _mobile, address, userId, hashedPassword, "CUSTOMER",
 					preferences);
 
 			// Register the user

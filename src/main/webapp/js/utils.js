@@ -50,11 +50,6 @@ function validateEmail(email) {
   return emailRegex.test(email);
 }
 
-function validateMobile(mobile) {
-  const mobileRegex = /^(\+\d{1,3}[- ]?)?\d{10}$/;
-  return mobileRegex.test(mobile);
-}
-
 function validatePassword(password) {
   // Must contain uppercase, lowercase, and special character
   const hasUpper = /[A-Z]/.test(password);
@@ -66,6 +61,12 @@ function validatePassword(password) {
 function validatePincode(pincode) {
   return /^[0-9]{6}$/.test(pincode);
 }
+
+function validateMobile(mobile) {
+    const mobilePattern = /^(\+91[\-\s]?)?(?!([6-9])\1{9})(?!1234567890)(?!9876543210)\d{10}$/;
+    return mobilePattern.test(mobile);
+}
+
 
 function validateUsername(username) {
   return username.length >= 5 && username.length <= 20;
@@ -154,6 +155,14 @@ function clearErrors() {
     el.textContent = "";
   });
 }
+
+function clearError(fieldId) {
+    const errorSpan = document.getElementById(fieldId + 'Error');
+    if (errorSpan) {
+        errorSpan.textContent = '';
+    }
+}
+
 
 function showError(fieldId, message) {
   const errorElement = document.getElementById(fieldId + "Error");

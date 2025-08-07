@@ -11,8 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
+
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.io.PrintWriter;
 
@@ -64,7 +67,12 @@ public class BookingServlet extends HttpServlet {
 
 		if (user == null) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			out.print("{\"status\":\"error\", \"message\":\"User not authenticated.\"}");
+
+			JSONObject errorJson = new JSONObject();
+			errorJson.put("status", "error");
+			errorJson.put("message", "User not authenticated.");
+
+			out.print(errorJson.toString());
 			out.flush();
 			return;
 		}
@@ -80,6 +88,8 @@ public class BookingServlet extends HttpServlet {
 		String receiverAddress = request.getParameter("receiverAddress");
 		String receiverPincode = request.getParameter("receiverPincode");
 
+		String packingPreference = request.getParameter("packingPreference");
+		String dropOffTime = request.getParameter("dropOffTime");
 		String weightStr = request.getParameter("weight");
 		double weight = 0.0;
 		try {
@@ -95,13 +105,18 @@ public class BookingServlet extends HttpServlet {
 		String contents = request.getParameter("contents");
 		String deliveryType = request.getParameter("deliveryType");
 		String preferredDateStr = request.getParameter("preferredDate");
-		String preferredTime = request.getParameter("preferredTime");
+		String preferredTime = request.getParameter("manualTime");
+		Double cost = Double.parseDouble(request.getParameter("cost"));
 
 		if (isInvalidForm(senderName, senderContact, senderAddress, senderPincode, receiverName, receiverContact,
 				receiverAddress, receiverPincode, weight, size, contents, deliveryType, preferredDateStr,
 				preferredTime)) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			out.print("{\"status\":\"error\", \"message\":\"Please fill in all required fields correctly.\"}");
+			JSONObject errorJson = new JSONObject();
+			errorJson.put("status", "error");
+			errorJson.put("message", "Please fill in all required fields correctly.");
+
+			out.print(errorJson.toString());
 			out.flush();
 			return;
 		}
@@ -109,13 +124,20 @@ public class BookingServlet extends HttpServlet {
 		Date preferredDate = Date.valueOf(preferredDateStr);
 		String dateTimeStr = preferredDateStr + "T" + preferredTime;
 
-		LocalDateTime dateTime;
+		LocalDateTime dateTime, dropOffDate;
 		try {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 			dateTime = LocalDateTime.parse(dateTimeStr);
+			dropOffDate = LocalDateTime.parse(dropOffTime, formatter);
 		} catch (DateTimeParseException e) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			out.print("{\"status\":\"error\", \"message\":\"Invalid date or time format.\"}");
+
+			JSONObject errorJson = new JSONObject();
+			errorJson.put("status", "error");
+			errorJson.put("message", "Invalid date or time format.");
+			out.print(errorJson.toString());
 			out.flush();
+
 			return;
 		}
 
@@ -128,25 +150,34 @@ public class BookingServlet extends HttpServlet {
 		booking.setRecMobile(receiverContact);
 		booking.setRecAddress(receiverAddress);
 		booking.setRecPin(receiverPincode);
-		booking.setParWeightGram((int) (weight * 1000));
+		booking.setParWeightGram((int) weight);
 		booking.setParContentsDescription(contents);
 		booking.setParDeliveryType(deliveryType);
-		booking.setParPackingPreference(size);
+		booking.setParPackingPreference(packingPreference);
+		booking.setSize(size);
 		booking.setParPickupTime(Timestamp.valueOf(dateTime));
-		booking.setParDropoffTime(Timestamp.valueOf(preferredDateStr + " 18:00:00"));
+		booking.setParDropoffTime(Timestamp.valueOf(dropOffDate));
 		booking.setBookingDate(new Timestamp(System.currentTimeMillis()));
-
 		try {
 			int bookingId = bookingService.createBooking(booking);
 
-			out.print("{\"status\":\"success\", \"message\":\"Booking created successfully.\", \"bookingId\":"
-					+ bookingId + "}");
+			JSONObject successJson = new JSONObject();
+			successJson.put("status", "success");
+			successJson.put("message", "Booking created successfully.");
+			successJson.put("bookingId",booking.getBookingId());
+			out.print(successJson.toString());
+			out.flush();
+
 			out.flush();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			out.print("{\"status\":\"error\", \"message\":\"A database error occurred. Please try again later.\"}");
+			JSONObject errorJson = new JSONObject();
+			errorJson.put("status", "error");
+			errorJson.put("message", "A database error occurred. Please try again later.");
+			out.print(errorJson.toString());
 			out.flush();
+
 		}
 	}
 
